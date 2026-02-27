@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  bot:
+    build: .
+    container_name: affiliate-bot
+    env_file: .env
+    restart: unless-stopped
+    volumes:
+      - bot_data:/app/data
+    depends_on:
+      redis:
+        condition: service_started
+
+  redis:
+    image: redis:7-alpine
+    container_name: affiliate-redis
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+
+volumes:
+  bot_data:
+  redis_data:
