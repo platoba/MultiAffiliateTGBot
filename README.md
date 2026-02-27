@@ -29,7 +29,7 @@
 ### Quick Start
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/MultiAffiliateTGBot.git
+git clone https://github.com/platoba/MultiAffiliateTGBot.git
 cd MultiAffiliateTGBot
 cp .env.example .env
 # Edit .env with your credentials
@@ -99,7 +99,7 @@ pm2 start bot.py --name affiliate-bot --interpreter python3
 ### 快速开始
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/MultiAffiliateTGBot.git
+git clone https://github.com/platoba/MultiAffiliateTGBot.git
 cd MultiAffiliateTGBot
 cp .env.example .env
 # 编辑 .env 填入你的配置
@@ -123,6 +123,6 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ## 🔗 More Tools
 
-- [Amazon-SP-API-Python](https://github.com/YOUR_USERNAME/Amazon-SP-API-Python) - Modern Amazon SP-API client
-- [Smart-Link-Shortener](https://github.com/YOUR_USERNAME/Smart-Link-Shortener) - Self-hosted link shortener with analytics
-- [AI-Listing-Writer](https://github.com/YOUR_USERNAME/AI-Listing-Writer) - AI-powered product listing generator
+- [Amazon-SP-API-Python](https://github.com/platoba/Amazon-SP-API-Python) - Modern Amazon SP-API client
+- [Smart-Link-Shortener](https://github.com/platoba/Smart-Link-Shortener) - Self-hosted link shortener with analytics
+- [AI-Listing-Writer](https://github.com/platoba/AI-Listing-Writer) - AI-powered product listing generator
