@@ -7,22 +7,38 @@ on:
     branches: [main]
 
 jobs:
-  test:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: pip install -r requirements.txt pytest
-      - run: pytest tests/ -v --tb=short
+      - run: pip install ruff
+      - run: ruff check app/ bot.py analytics.py
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: pip install pytest pytest-cov requests
+      - run: python -m pytest tests/ -v --tb=short --cov=app --cov=bot --cov=analytics
         env:
           BOT_TOKEN: "test:token"
           AMAZON_TAG: "test-20"
+          SHOPEE_AFF_ID: "test_shopee"
+          LAZADA_AFF_ID: "test_lazada"
+          ALIEXPRESS_AFF_ID: "test_ali"
+          TIKTOK_AFF_ID: "test_tiktok"
 
   docker:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build Docker image
-        run: docker build -t affiliate-bot .
+      - run: docker compose build

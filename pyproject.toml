@@ -1,0 +1,36 @@
+[project]
+name = "multi-affiliate-tg-bot"
+version = "2.0.0"
+description = "Multi-platform affiliate link converter Telegram bot with analytics, caching, and rate limiting"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+dependencies = [
+    "requests>=2.28.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "ruff>=0.1.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+
+[tool.ruff]
+target-version = "py39"
+line-length = 120
+select = ["E", "F", "W", "I"]
+
+[tool.coverage.run]
+source = ["app", "bot", "analytics"]
+omit = ["tests/*"]
+
+[tool.coverage.report]
+show_missing = true
+skip_empty = true

@@ -1,128 +1,122 @@
-# Multi-Platform Affiliate Telegram Bot
+# Multi-Platform Affiliate Telegram Bot v2.0
 
-🤖 A Telegram bot that automatically converts product links from **5 major e-commerce platforms** into affiliate links.
+🤖 A Telegram bot that automatically converts product links from **5 major e-commerce platforms** into affiliate links. Now with modular architecture, SQLite analytics, link caching, rate limiting, and multi-language support.
 
-[English](#english) | [中文](#中文)
+## ✨ What's New in v2.0
 
-## English
+- 🏗️ **Modular Architecture** — Clean separation: platforms / services / config
+- 🗄️ **SQLite Analytics** — Proper database with daily stats, user tracking, group stats
+- ⚡ **Link Cache** — Avoid re-converting the same URL (TTL-based)
+- 🚦 **Rate Limiter** — Token-bucket per-user rate limiting with burst protection
+- 💰 **Commission Display** — Show estimated commission rates per platform
+- 📊 **Export** — CSV/JSON data export via `/export` command
+- 🌍 **Multi-language** — Chinese (zh) and English (en) support
+- 🚫 **User Management** — Block/unblock users, enable/disable groups
+- 📈 **Rich Reports** — Visual bar charts, trends, and group analytics
+- 🧪 **100+ Tests** — Comprehensive test coverage across 9 test files
 
-### Supported Platforms
+## Supported Platforms
 
-| Platform | Affiliate Program | Link Types |
-|----------|------------------|------------|
-| 🛒 Amazon | Amazon Associates | Standard URLs + short links (amzn.to, a.co) |
-| 🧡 Shopee | Shopee Affiliate | All regional domains |
-| 💜 Lazada | Lazada Affiliate | All 6 SEA countries |
-| 🔴 AliExpress | AliExpress Portals | Standard + short links |
-| 🎵 TikTok Shop | TikTok Affiliate | Shop links |
+| Platform | Emoji | Affiliate Program | Commission |
+|----------|-------|-------------------|------------|
+| Amazon | 🛒 | Amazon Associates | 1-10% |
+| Shopee | 🧡 | Shopee Affiliate | 2-10% |
+| Lazada | 💜 | Lazada Affiliate | 1-12% |
+| AliExpress | 🔴 | AliExpress Portals | 3-9% |
+| TikTok Shop | 🎵 | TikTok Affiliate | 2-20% |
 
-### Features
-
-- ✅ Auto-detects platform from URL
-- ✅ Handles multiple links in one message
-- ✅ Expands short URLs (amzn.to, a.co, etc.)
-- ✅ Works in private chats and groups
-- ✅ Supports all regional domains (20+ Amazon, 12+ Shopee, 6 Lazada)
-- ✅ Built-in conversion statistics (`/stats`)
-- ✅ Zero dependencies beyond `requests`
-
-### Quick Start
+## Quick Start
 
 ```bash
+# Clone
 git clone https://github.com/platoba/MultiAffiliateTGBot.git
 cd MultiAffiliateTGBot
+
+# Configure
 cp .env.example .env
-# Edit .env with your credentials
+# Edit .env with your bot token and affiliate IDs
+
+# Run
 pip install -r requirements.txt
 python bot.py
 ```
 
-### Environment Variables
-
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `BOT_TOKEN` | ✅ | Telegram Bot Token from @BotFather |
-| `AMAZON_TAG` | ❌ | Amazon Associates tag (e.g., `yourtag-20`) |
-| `AMAZON_DOMAIN` | ❌ | Amazon domain (default: `amazon.com`) |
-| `SHOPEE_AFF_ID` | ❌ | Shopee Affiliate ID |
-| `LAZADA_AFF_ID` | ❌ | Lazada Affiliate ID |
-| `ALIEXPRESS_AFF_ID` | ❌ | AliExpress Affiliate ID |
-| `TIKTOK_AFF_ID` | ❌ | TikTok Shop Affiliate ID |
-| `DEV_CHAT_ID` | ❌ | Your Telegram chat ID for error alerts |
-
-> Configure at least one platform to start earning commissions!
-
-### Deploy (24/7)
+## Docker
 
 ```bash
-# Using systemd
-sudo cp multi-affiliate-bot.service /etc/systemd/system/
-sudo systemctl enable multi-affiliate-bot
-sudo systemctl start multi-affiliate-bot
-
-# Using Docker
-docker build -t affiliate-bot .
-docker run -d --env-file .env affiliate-bot
-
-# Using PM2
-pm2 start bot.py --name affiliate-bot --interpreter python3
-```
-
-### Commission Rates
-
-| Platform | Typical Rate | Cookie Duration |
-|----------|-------------|-----------------|
-| Amazon | 1-10% | 24 hours |
-| Shopee | 5-15% | 7 days |
-| Lazada | 5-12% | 7 days |
-| AliExpress | 3-9% | 3 days |
-| TikTok Shop | 5-20% | Varies |
-
----
-
-## 中文
-
-### 多平台联盟推广 Telegram 机器人
-
-一个 Telegram 机器人，自动将 5 大电商平台的产品链接转换为联盟推广链接。
-
-### 支持平台
-
-| 平台 | 联盟计划 | 覆盖地区 |
-|------|----------|----------|
-| 🛒 Amazon | Amazon Associates | 全球20+站点 |
-| 🧡 Shopee | Shopee联盟 | 东南亚/台湾/巴西/墨西哥 |
-| 💜 Lazada | Lazada联盟 | 东南亚6国 |
-| 🔴 AliExpress | 速卖通联盟 | 全球 |
-| 🎵 TikTok Shop | TikTok联盟 | 全球 |
-
-### 快速开始
-
-```bash
-git clone https://github.com/platoba/MultiAffiliateTGBot.git
-cd MultiAffiliateTGBot
 cp .env.example .env
-# 编辑 .env 填入你的配置
-pip install -r requirements.txt
-python bot.py
+# Edit .env
+docker compose up -d
 ```
 
-### 使用方法
+## Commands
 
-1. 创建 Telegram Bot（@BotFather → /newbot）
-2. 注册各平台联盟计划，获取推广ID
-3. 配置 `.env` 环境变量
-4. 运行 `python bot.py`
-5. 发送产品链接给Bot，自动返回联盟链接
+| Command | Description |
+|---------|-------------|
+| `/start` | Welcome message with active platforms |
+| `/help` | Usage instructions |
+| `/stats` | Overall conversion statistics |
+| `/mystats` | Personal conversion statistics |
+| `/report` | Detailed analytics report |
+| `/export` | Export data as CSV |
+| `/commission` | Commission rate reference table |
 
-### License
+## Architecture (v2.0)
 
-MIT License - see [LICENSE](LICENSE) for details.
+```
+app/
+├── __init__.py            # Version
+├── config.py              # Centralized config from env
+├── platforms/             # Platform handlers
+│   ├── base.py            # Abstract base + ConversionResult
+│   ├── amazon.py          # Amazon Associates
+│   ├── shopee.py          # Shopee Affiliate
+│   ├── lazada.py          # Lazada Affiliate
+│   ├── aliexpress.py      # AliExpress Portals
+│   ├── tiktok.py          # TikTok Affiliate
+│   └── registry.py        # URL detection + dispatch
+├── services/              # Business logic
+│   ├── database.py        # SQLite analytics (users, groups, daily)
+│   ├── cache.py           # Link conversion cache (TTL)
+│   ├── rate_limiter.py    # Token-bucket rate limiting
+│   ├── exporter.py        # CSV/JSON export + reports
+│   └── formatter.py       # i18n message formatting (zh/en)
+bot.py                     # Telegram bot (legacy compatible)
+analytics.py               # Legacy analytics (still works)
+tests/                     # 100+ tests across 9 files
+```
 
----
+## Testing
 
-## 🔗 More Tools
+```bash
+# Install dev deps
+pip install pytest pytest-cov requests
 
-- [Amazon-SP-API-Python](https://github.com/platoba/Amazon-SP-API-Python) - Modern Amazon SP-API client
-- [Smart-Link-Shortener](https://github.com/platoba/Smart-Link-Shortener) - Self-hosted link shortener with analytics
-- [AI-Listing-Writer](https://github.com/platoba/AI-Listing-Writer) - AI-powered product listing generator
+# Run all tests
+make test
+
+# With coverage
+make test-cov
+
+# Via Docker
+docker compose run --rm test
+```
+
+## Configuration
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `BOT_TOKEN` | Telegram bot token | Required |
+| `AMAZON_TAG` | Amazon Associates tag | - |
+| `SHOPEE_AFF_ID` | Shopee affiliate ID | - |
+| `LAZADA_AFF_ID` | Lazada affiliate ID | - |
+| `ALIEXPRESS_AFF_ID` | AliExpress affiliate ID | - |
+| `TIKTOK_AFF_ID` | TikTok affiliate ID | - |
+| `BOT_LANGUAGE` | Language (zh/en) | zh |
+| `MAX_LINKS_PER_MSG` | Max links per message | 10 |
+| `RATE_LIMIT_PER_MIN` | Rate limit per user/min | 30 |
+| `CACHE_TTL_HOURS` | Link cache TTL | 24 |
+
+## License
+
+MIT

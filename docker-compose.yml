@@ -1,24 +1,31 @@
-version: "3.9"
+version: "3.8"
 
 services:
   bot:
     build: .
     container_name: affiliate-bot
-    env_file: .env
     restart: unless-stopped
+    env_file: .env
     volumes:
-      - bot_data:/app/data
-    depends_on:
-      redis:
-        condition: service_started
+      - bot-data:/app/data
+    environment:
+      - DATA_DIR=/app/data
+      - PYTHONUNBUFFERED=1
 
-  redis:
-    image: redis:7-alpine
-    container_name: affiliate-redis
-    volumes:
-      - redis_data:/data
-    command: redis-server --appendonly yes
+  test:
+    build: .
+    container_name: affiliate-bot-test
+    command: python -m pytest tests/ -v --tb=short
+    profiles:
+      - test
+    environment:
+      - BOT_TOKEN=test:token
+      - AMAZON_TAG=test-20
+      - SHOPEE_AFF_ID=test_shopee
+      - LAZADA_AFF_ID=test_lazada
+      - ALIEXPRESS_AFF_ID=test_ali
+      - TIKTOK_AFF_ID=test_tiktok
+      - DATA_DIR=/tmp/test-data
 
 volumes:
-  bot_data:
-  redis_data:
+  bot-data:
