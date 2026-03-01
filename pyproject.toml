@@ -1,7 +1,7 @@
 [project]
 name = "multi-affiliate-tg-bot"
-version = "2.0.0"
-description = "Multi-platform affiliate link converter Telegram bot with analytics, caching, and rate limiting"
+version = "3.0.0"
+description = "Multi-platform affiliate link converter Telegram bot with deep linking, commission tracking, A/B testing, analytics, caching, and rate limiting"
 requires-python = ">=3.9"
 license = {text = "MIT"}
 dependencies = [
