@@ -1,17 +1,5 @@
 # Changelog
 
-## v3.1.0 (2026-03-02)
-
-### 🧠 ML-Powered Recommendation Engine
-- Collaborative filtering recommender with Jaccard similarity
-- /smart_recommend command for personalized recommendations
-- /trending [hours] command for hot products
-- Automatic category detection (5 categories)
-- 5 comprehensive tests (all passing)
-- See CHANGELOG_v3.1.md for full details
-
-# Changelog
-
 ## v3.0.0 (2026-03-01)
 
 ### 🛡️ Fraud Detection Engine (`app/services/fraud_detector.py`)

@@ -584,3 +584,92 @@ def record_link_interaction(user_id, original_url, platform):
     except Exception as e:
         logger.error(f"Failed to record interaction: {e}")
 
+
+# ============ ML推荐引擎集成 ============
+from app.ml_recommender import MLRecommender
+
+ml_recommender = MLRecommender()
+
+@bot.message_handler(commands=['smart_recommend'])
+def handle_smart_recommend(message):
+    """智能推荐命令（基于协同过滤）"""
+    user_id = message.from_user.id
+    
+    # 获取个性化推荐
+    recommendations = ml_recommender.recommend_products(user_id, limit=5)
+    
+    if not recommendations:
+        bot.reply_to(message, 
+            "🤖 智能推荐引擎需要更多数据\n"
+            "Smart recommendation needs more data\n\n"
+            "💡 继续使用机器人，我们会基于相似用户为你推荐！\n"
+            "Keep using the bot, we'll recommend based on similar users!"
+        )
+        return
+    
+    # 构建推荐消息
+    response = "🧠 智能推荐 / Smart Recommendations:\n\n"
+    response += "基于相似用户偏好 / Based on similar users\n\n"
+    
+    for i, rec in enumerate(recommendations, 1):
+        category_emoji = {
+            'electronics': '📱',
+            'fashion': '👗',
+            'home': '🏠',
+            'beauty': '💄',
+            'sports': '⚽'
+        }.get(rec['category'], '🔗')
+        
+        response += f"{i}. {category_emoji} {rec['category'].upper()}\n"
+        response += f"   {rec['url'][:60]}...\n"
+        response += f"   📊 匹配度 / Match: {rec['score']:.2f}\n"
+        response += f"   💡 {rec['reason']}\n\n"
+    
+    bot.reply_to(message, response)
+
+@bot.message_handler(commands=['trending'])
+def handle_trending(message):
+    """热门产品命令"""
+    # 解析时间范围参数
+    text = message.text.strip()
+    parts = text.split()
+    hours = 24  # 默认24小时
+    
+    if len(parts) > 1:
+        try:
+            hours = int(parts[1])
+            if hours < 1 or hours > 168:  # 最多7天
+                hours = 24
+        except ValueError:
+            pass
+    
+    trending = ml_recommender.get_trending_products(hours=hours, limit=10)
+    
+    if not trending:
+        bot.reply_to(message, 
+            f"📊 过去{hours}小时暂无热门产品\n"
+            f"No trending products in the last {hours} hours\n\n"
+            "💡 需要至少3次转换才会显示\n"
+            "Need at least 3 conversions to show"
+        )
+        return
+    
+    # 构建热门消息
+    response = f"🔥 热门产品 / Trending Products ({hours}h)\n\n"
+    
+    for i, item in enumerate(trending, 1):
+        category_emoji = {
+            'electronics': '📱',
+            'fashion': '👗',
+            'home': '🏠',
+            'beauty': '💄',
+            'sports': '⚽'
+        }.get(item['category'], '🔗')
+        
+        response += f"{i}. {category_emoji} {item['category'].upper()}\n"
+        response += f"   {item['url'][:60]}...\n"
+        response += f"   {item['reason']}\n"
+        response += f"   👥 {item['unique_users']} unique users\n\n"
+    
+    bot.reply_to(message, response)
+
