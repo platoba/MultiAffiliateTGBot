@@ -68,9 +68,6 @@ docker compose up -d
 | `/report` | Detailed analytics report |
 | `/export` | Export data as CSV |
 | `/commission` | Commission rate reference table |
-| `/watch` | Add price monitoring (reply to product link) |
-| `/mywatches` | View your price watches |
-| `/unwatch <ID>` | Remove a price watch |
 
 ## Architecture (v2.0)
 

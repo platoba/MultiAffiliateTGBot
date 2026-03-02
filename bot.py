@@ -370,3 +370,140 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+# ============ 价格监控功能 ============
+from app.services.price_monitor import PriceMonitor
+
+price_monitor = PriceMonitor()
+
+
+@bot.message_handler(commands=['watch'])
+def handle_watch_command(message):
+    """添加价格监控"""
+    user_id = message.from_user.id
+    
+    # 检查是否在回复消息
+    if not message.reply_to_message:
+        bot.reply_to(message, "❌ 请回复包含产品链接的消息来添加价格监控")
+        return
+    
+    # 从回复的消息中提取链接
+    original_text = message.reply_to_message.text or ""
+    urls = extract_urls(original_text)
+    
+    if not urls:
+        bot.reply_to(message, "❌ 未找到产品链接")
+        return
+    
+    # 只监控第一个链接
+    url = urls[0]
+    
+    # 检测平台
+    platform_handler = None
+    for handler in platform_handlers:
+        if handler.can_handle(url):
+            platform_handler = handler
+            break
+    
+    if not platform_handler:
+        bot.reply_to(message, "❌ 不支持该平台的价格监控")
+        return
+    
+    # 转换为联盟链接
+    result = platform_handler.convert(url)
+    
+    if result.success:
+        # 添加监控
+        success = price_monitor.add_watch(
+            user_id=user_id,
+            product_url=url,
+            affiliate_url=result.affiliate_url,
+            platform=result.platform,
+            product_title=result.product_title,
+            notify_threshold=0.05  # 默认5%降价通知
+        )
+        
+        if success:
+            bot.reply_to(
+                message,
+                f"✅ 已添加价格监控\n\n"
+                f"🏷️ {result.product_title or '产品'}\n"
+                f"📊 平台: {result.platform_emoji} {result.platform}\n"
+                f"🔔 降价5%时将通知您\n\n"
+                f"使用 /mywatches 查看所有监控"
+            )
+        else:
+            bot.reply_to(message, "❌ 添加监控失败，请稍后重试")
+    else:
+        bot.reply_to(message, f"❌ 链接转换失败: {result.error}")
+
+
+@bot.message_handler(commands=['mywatches'])
+def handle_mywatches_command(message):
+    """查看我的价格监控"""
+    user_id = message.from_user.id
+    watches = price_monitor.get_user_watches(user_id)
+    
+    if not watches:
+        bot.reply_to(message, "📭 您还没有添加任何价格监控\n\n使用 /watch 回复产品链接来添加监控")
+        return
+    
+    response = "📊 您的价格监控列表:\n\n"
+    
+    for i, watch in enumerate(watches, 1):
+        title = watch['product_title'] or '未知产品'
+        platform = watch['platform']
+        price = watch['current_price']
+        original = watch['original_price']
+        
+        response += f"{i}. {title}\n"
+        response += f"   平台: {platform}\n"
+        
+        if price and original:
+            change = ((price - original) / original) * 100
+            if change < 0:
+                response += f"   价格: {price} {watch['currency']} (↓ {abs(change):.1f}%)\n"
+            elif change > 0:
+                response += f"   价格: {price} {watch['currency']} (↑ {change:.1f}%)\n"
+            else:
+                response += f"   价格: {price} {watch['currency']}\n"
+        
+        response += f"   ID: {watch['id']}\n\n"
+    
+    response += "使用 /unwatch <ID> 移除监控"
+    
+    bot.reply_to(message, response)
+
+
+@bot.message_handler(commands=['unwatch'])
+def handle_unwatch_command(message):
+    """移除价格监控"""
+    user_id = message.from_user.id
+    
+    # 解析命令参数
+    parts = message.text.split()
+    if len(parts) < 2:
+        bot.reply_to(message, "❌ 请提供监控ID\n\n用法: /unwatch <ID>")
+        return
+    
+    try:
+        watch_id = int(parts[1])
+    except ValueError:
+        bot.reply_to(message, "❌ 无效的监控ID")
+        return
+    
+    # 移除监控
+    success = price_monitor.remove_watch(user_id, watch_id)
+    
+    if success:
+        bot.reply_to(message, f"✅ 已移除监控 #{watch_id}")
+    else:
+        bot.reply_to(message, f"❌ 移除失败，请检查ID是否正确")
+
+
+def extract_urls(text):
+    """从文本中提取URL"""
+    import re
+    url_pattern = r'https?://[^\s]+'
+    return re.findall(url_pattern, text)
