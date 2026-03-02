@@ -507,3 +507,80 @@ def extract_urls(text):
     import re
     url_pattern = r'https?://[^\s]+'
     return re.findall(url_pattern, text)
+
+# ============ 推荐引擎集成 ============
+from app.recommendation_engine import RecommendationEngine
+
+# 初始化推荐引擎
+recommendation_engine = RecommendationEngine()
+
+@bot.message_handler(commands=['recommend'])
+def handle_recommend(message):
+    """推荐产品命令"""
+    user_id = message.from_user.id
+    
+    # 获取推荐统计
+    stats = recommendation_engine.get_recommendation_stats(user_id)
+    
+    if not stats['has_enough_data']:
+        bot.reply_to(message, 
+            "🤖 推荐引擎需要更多数据\n"
+            "Recommendation engine needs more data\n\n"
+            f"当前交互次数 / Current interactions: {stats['total_interactions']}\n"
+            "需要至少3次交互 / Need at least 3 interactions\n\n"
+            "💡 发送更多产品链接来训练推荐系统\n"
+            "Send more product links to train the system"
+        )
+        return
+    
+    # 获取推荐
+    recommendations = recommendation_engine.recommend_products(user_id, limit=5)
+    
+    if not recommendations:
+        bot.reply_to(message, 
+            "😅 暂时没有推荐\n"
+            "No recommendations available yet\n\n"
+            "继续使用机器人，我们会学习你的偏好！\n"
+            "Keep using the bot, we'll learn your preferences!"
+        )
+        return
+    
+    # 构建推荐消息
+    response = "🎯 为你推荐 / Recommendations for you:\n\n"
+    
+    for i, rec in enumerate(recommendations, 1):
+        platform_emoji = {
+            'amazon': '🛒',
+            'shopee': '🧡',
+            'lazada': '💜',
+            'aliexpress': '🔴',
+            'tiktok': '🎵'
+        }.get(rec['platform'], '🔗')
+        
+        reason_text = {
+            'similar_users': '相似用户喜欢 / Similar users liked',
+            'trending': '热门产品 / Trending'
+        }.get(rec['reason'], '推荐 / Recommended')
+        
+        response += f"{i}. {platform_emoji} {rec['platform'].upper()}\n"
+        response += f"   {rec['url']}\n"
+        response += f"   📊 {reason_text} (score: {rec['score']})\n\n"
+    
+    response += f"💡 基于你的 {stats['total_interactions']} 次交互\n"
+    response += f"Based on your {stats['total_interactions']} interactions"
+    
+    bot.reply_to(message, response)
+
+# 在链接转换时记录交互
+def record_link_interaction(user_id, original_url, platform):
+    """记录链接交互"""
+    try:
+        recommendation_engine.record_interaction(
+            user_id=user_id,
+            product_url=original_url,
+            platform=platform,
+            action='click'
+        )
+    except Exception as e:
+        logger.error(f"Failed to record interaction: {e}")
+
