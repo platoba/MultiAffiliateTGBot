@@ -1,12 +1,9 @@
 """Tests for the analytics dashboard engine."""
 
-import os
-import time
-import tempfile
 import pytest
 from app.services.analytics_dashboard import (
     AnalyticsDashboard, RevenueData, PlatformMetrics,
-    GeoMetrics, GrowthMetric, TimeGranularity, UserSegment,
+    GrowthMetric, TimeGranularity, UserSegment,
     ReportFormat,
 )
 from datetime import datetime, timezone, timedelta

@@ -2,7 +2,6 @@
 
 import os
 import sys
-import pytest
 
 # Set test env vars before importing
 os.environ["BOT_TOKEN"] = "test:token"

@@ -14,7 +14,6 @@ Features:
 
 import sqlite3
 import os
-import time
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Optional

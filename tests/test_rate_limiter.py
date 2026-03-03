@@ -1,7 +1,5 @@
 """Tests for rate limiter."""
 
-import time
-import pytest
 from app.services.rate_limiter import RateLimiter
 
 

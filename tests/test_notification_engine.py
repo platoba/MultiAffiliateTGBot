@@ -1,14 +1,9 @@
 """Tests for the notification engine."""
 
-import os
-import time
-import tempfile
 import pytest
 from app.services.notification_engine import (
     NotificationEngine, Notification, NotificationType,
-    NotificationPriority, NotificationStatus,
-    MilestoneConfig, Goal, QuietHours,
-    DEFAULT_MILESTONES,
+    NotificationPriority, MilestoneConfig, Goal, QuietHours,
 )
 
 

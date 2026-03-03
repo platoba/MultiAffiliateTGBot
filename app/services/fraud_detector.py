@@ -17,7 +17,6 @@ import sqlite3
 import os
 import time
 import hashlib
-import math
 import statistics
 from datetime import datetime, timezone, timedelta
 from pathlib import Path

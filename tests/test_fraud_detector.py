@@ -1,13 +1,10 @@
 """Tests for the fraud detection engine."""
 
-import os
 import time
-import tempfile
 import pytest
 from app.services.fraud_detector import (
     FraudDetector, ClickEvent, FraudVerdict, FraudSignal,
     RiskLevel, FraudType, ActionType,
-    BOT_SIGNATURES, PROXY_INDICATORS,
 )
 
 

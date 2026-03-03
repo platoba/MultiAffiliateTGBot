@@ -23,7 +23,6 @@ from pathlib import Path
 from typing import Optional, Callable
 from dataclasses import dataclass, field
 from enum import Enum
-from collections import defaultdict
 
 
 class NotificationPriority(str, Enum):

@@ -1,7 +1,5 @@
 """Tests for database service."""
 
-import pytest
-from app.services.database import Database
 
 
 class TestDatabase:

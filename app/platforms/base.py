@@ -1,6 +1,5 @@
 """Base class for platform handlers."""
 
-import re
 import requests
 from abc import ABC, abstractmethod
 from dataclasses import dataclass

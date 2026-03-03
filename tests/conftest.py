@@ -2,7 +2,6 @@
 
 import os
 import sys
-import tempfile
 import pytest
 
 # Set test env vars before any app imports
@@ -17,7 +16,7 @@ os.environ["BOT_LANGUAGE"] = "zh"
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-from app.config import AppConfig, BotConfig, PlatformConfig, DatabaseConfig
+from app.config import AppConfig, PlatformConfig
 from app.platforms.registry import PlatformRegistry
 from app.services.database import Database
 from app.services.cache import LinkCache

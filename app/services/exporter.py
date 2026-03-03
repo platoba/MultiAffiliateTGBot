@@ -5,8 +5,6 @@ Export stats to CSV and JSON formats.
 import csv
 import json
 import io
-from datetime import datetime
-from typing import Optional
 
 from .database import Database
 
@@ -51,13 +49,13 @@ class StatsExporter:
         }
 
         lines = [
-            f"📊 联盟转换报告",
+            "📊 联盟转换报告",
             f"{'='*30}",
-            f"",
+            "",
             f"🔗 总转换: {stats['total']}",
             f"📅 今日: {stats['today']}",
             f"📆 本周: {stats['this_week']}",
-            f"",
+            "",
         ]
 
         # Platform breakdown
@@ -110,7 +108,7 @@ class StatsExporter:
 
         lines = [
             f"📊 {stats['username']} 的统计",
-            f"",
+            "",
             f"🔗 总转换: {stats['total_conversions']} 次",
             f"📅 首次使用: {stats.get('first_seen', 'N/A')[:10]}",
             f"🕐 最近使用: {stats.get('last_seen', 'N/A')[:10]}",

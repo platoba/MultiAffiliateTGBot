@@ -1,8 +1,6 @@
 """Tests for commission tracker."""
 
-import os
 import pytest
-import tempfile
 from app.services.commission_tracker import (
     CommissionTracker,
     CommissionRate,
@@ -11,7 +9,6 @@ from app.services.commission_tracker import (
     Goal,
     DEFAULT_RATES,
     AMAZON_CATEGORY_RATES,
-    PayoutStatus,
 )
 
 

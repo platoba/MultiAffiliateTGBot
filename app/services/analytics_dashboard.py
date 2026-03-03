@@ -21,10 +21,8 @@ import json
 import io
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
-from typing import Optional
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
-from collections import defaultdict
 
 
 class TimeGranularity(str, Enum):

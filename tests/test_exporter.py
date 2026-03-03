@@ -1,6 +1,5 @@
 """Tests for stats exporter."""
 
-import pytest
 
 
 class TestStatsExporter:

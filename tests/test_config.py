@@ -1,7 +1,6 @@
 """Tests for configuration module."""
 
 import os
-import pytest
 
 
 class TestBotConfig:

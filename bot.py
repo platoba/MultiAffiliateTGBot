@@ -7,9 +7,8 @@ Multi-Platform Affiliate Telegram Bot
 import re
 import os
 import time
-import json
 import requests
-from urllib.parse import urlparse, urlencode, parse_qs, urlunparse
+from urllib.parse import urlparse
 
 # ============================================================
 # 配置
@@ -283,7 +282,7 @@ def main():
         platforms.append(f"TikTok ({TIKTOK_AFF_ID})")
 
     print(f"\n{'='*50}")
-    print(f"  Multi-Platform Affiliate Telegram Bot")
+    print("  Multi-Platform Affiliate Telegram Bot")
     print(f"  已启用平台: {', '.join(platforms) if platforms else '无 (请配置环境变量)'}")
     print(f"{'='*50}")
 
@@ -291,7 +290,7 @@ def main():
     if me and me.get("ok"):
         bot_name = me["result"]["username"]
         print(f"\n✅ @{bot_name} 已上线!")
-        print(f"🤖 等待消息... Ctrl+C 停止\n")
+        print("🤖 等待消息... Ctrl+C 停止\n")
     else:
         print("\n❌ 无法连接Telegram! 检查Token和网络。")
         return
@@ -328,15 +327,15 @@ def main():
 
                 elif text == "/help":
                     tg_send(chat_id,
-                        f"📖 使用帮助\n\n"
-                        f"直接发送产品链接即可，支持:\n"
-                        f"🛒 Amazon — 全球站点 + 短链(amzn.to/a.co)\n"
-                        f"🧡 Shopee — 东南亚/台湾/巴西/墨西哥\n"
-                        f"💜 Lazada — 东南亚6国\n"
-                        f"🔴 AliExpress — 全球\n"
-                        f"🎵 TikTok Shop — 全球\n\n"
-                        f"💡 一条消息可包含多个链接，自动识别平台。\n"
-                        f"💡 支持私聊和群聊。",
+                        "📖 使用帮助\n\n"
+                        "直接发送产品链接即可，支持:\n"
+                        "🛒 Amazon — 全球站点 + 短链(amzn.to/a.co)\n"
+                        "🧡 Shopee — 东南亚/台湾/巴西/墨西哥\n"
+                        "💜 Lazada — 东南亚6国\n"
+                        "🔴 AliExpress — 全球\n"
+                        "🎵 TikTok Shop — 全球\n\n"
+                        "💡 一条消息可包含多个链接，自动识别平台。\n"
+                        "💡 支持私聊和群聊。",
                         msg_id)
 
                 elif text == "/stats":

@@ -1,7 +1,6 @@
 """Tests for link cache."""
 
 import time
-import pytest
 from app.services.cache import LinkCache
 
 

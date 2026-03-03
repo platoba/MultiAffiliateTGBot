@@ -1,6 +1,5 @@
 """Tests for platform handlers."""
 
-import pytest
 from app.platforms.amazon import AmazonHandler
 from app.platforms.shopee import ShopeeHandler
 from app.platforms.lazada import LazadaHandler

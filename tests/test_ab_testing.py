@@ -1,7 +1,6 @@
 """Tests for A/B testing manager."""
 
 import pytest
-import math
 from app.services.ab_testing import (
     ABTestManager,
     Experiment,

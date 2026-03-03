@@ -7,7 +7,6 @@ import json
 import os
 from datetime import datetime, timezone
 from pathlib import Path
-from collections import defaultdict
 
 DATA_DIR = Path(os.environ.get("DATA_DIR", "./data"))
 STATS_FILE = DATA_DIR / "stats.json"

@@ -1,6 +1,5 @@
 """Tests for message formatter."""
 
-import pytest
 from app.platforms.base import ConversionResult
 
 

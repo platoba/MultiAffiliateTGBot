@@ -1,6 +1,5 @@
 """Tests for platform registry."""
 
-import pytest
 
 
 class TestPlatformRegistry:
