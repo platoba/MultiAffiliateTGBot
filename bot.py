@@ -673,3 +673,52 @@ def handle_trending(message):
     
     bot.reply_to(message, response)
 
+
+# ========== 智能推荐功能 ==========
+from app.recommendation_engine import RecommendationEngine
+
+recommendation_engine = RecommendationEngine()
+
+@bot.message_handler(commands=['recommend'])
+def handle_recommend(message):
+    """个性化推荐命令"""
+    user_id = message.from_user.id
+    
+    recs = recommendation_engine.get_recommendations(user_id, limit=5)
+    
+    if not recs:
+        bot.reply_to(message, "🤔 暂无推荐，请先浏览一些产品链接！")
+        return
+    
+    response = "🎯 *为你推荐*\n\n"
+    for i, rec in enumerate(recs, 1):
+        response += f"{i}. {rec['platform'].upper()}\n"
+        response += f"   🔗 {rec['url']}\n"
+        response += f"   📌 {rec['keywords']}\n\n"
+    
+    bot.reply_to(message, response, parse_mode='Markdown')
+
+@bot.message_handler(commands=['trending'])
+def handle_trending(message):
+    """热门产品命令"""
+    trending = recommendation_engine.get_trending_products(limit=10)
+    
+    if not trending:
+        bot.reply_to(message, "📊 暂无热门产品数据")
+        return
+    
+    response = "🔥 *本周热门产品*\n\n"
+    for i, item in enumerate(trending, 1):
+        response += f"{i}. {item['platform'].upper()} - {item['conversion_count']}次转换\n"
+        response += f"   🔗 {item['url']}\n\n"
+    
+    bot.reply_to(message, response, parse_mode='Markdown')
+
+# 在链接转换后更新用户兴趣
+def update_interest_on_conversion(user_id: int, url: str, platform: str):
+    """链接转换时更新用户兴趣"""
+    try:
+        recommendation_engine.update_user_interest(user_id, url, platform)
+    except Exception as e:
+        logger.error(f"Failed to update user interest: {e}")
+
